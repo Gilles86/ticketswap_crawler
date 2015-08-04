@@ -17,13 +17,14 @@ class TicketSwapSpider(scrapy.Spider):
         
         print 'yoyoyoy'
 
-        for sel in response.xpath('//section[@class = "ad-list"]'):
+        for sel in response.xpath('//section[@class = "ad-list"]/article[@itemprop="tickets"]'):
             item = items.TicketswapCrawlerItem()
-            item['id'] = sel.xpath('div/span/a[@itemprop = "offerurl"]/@href').re(r'/tickets/([0-9]+)/.*')[0]
+            print sel
+            item['id'] = sel.xpath('a[@itemprop = "offerurl"]/@href').re(r'/tickets/([0-9]+)/.*')[0]
             #item['description'] = sel.xpath('div/span/a[@itemprop = "offerurl"]/text()').extract()[0]
-            item['quantity'] = sel.xpath('div/span[@itemprop = "quantity"]/text()').re('.*([0-9]+).*')[0]
-            item['price'] = sel.xpath('div/meta[@itemprop = "price"]/@content').extract()[0]
-            item['user'] = sel.xpath('div[@class = "user"]/span[@class = "value"]/text()').extract()[0]
+            item['quantity'] = sel.xpath('.//meta[@itemprop="quantity"]/@content').extract()[0]
+            item['price'] = sel.xpath('.//meta[@itemprop = "price"]/@content').extract()[0]
+            item['user'] = sel.xpath('.//div[@class = "ad-list-user"]/div[@class = "name"]/text()').extract()[0]
             item['time'] = str(datetime.datetime.now())
             yield item
 
