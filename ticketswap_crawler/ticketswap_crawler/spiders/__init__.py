@@ -17,7 +17,8 @@ class TicketSwapSpider(scrapy.Spider):
         
         print 'yoyoyoy'
 
-        for sel in response.xpath('//section[@class = "ad-list"]/article[@itemprop="tickets"]'):
+        # Discard the last 5 ones ('verkocht')
+        for sel in response.xpath('//section[@class = "ad-list"]/article[@itemprop="tickets"]')[:-5]:
             item = items.TicketswapCrawlerItem()
             print sel
             item['id'] = sel.xpath('a[@itemprop = "offerurl"]/@href').re(r'/tickets/([0-9]+)/.*')[0]
